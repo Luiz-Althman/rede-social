@@ -1,0 +1,22 @@
+.wrapper {
+    max-width: 70rem;
+    /* 70rem = 1120px */
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 256px 1fr;
+    /* uma coluca com tamanho fixo e a outra com tamanho variavel usando o 1 fr padrao do template coluns*/
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 87.5%;
+        /* 16px -> 100% 
+        14px -> x% = 87.5% */
+    }
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+}
