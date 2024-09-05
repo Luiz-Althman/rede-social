@@ -22,6 +22,11 @@ export interface PostType {
     content: Content[];
 }
 
+export interface PostTypeResponse {
+    status: number;
+    data: PostType[];
+}
+
 interface PostProps {
     post: PostType;
 }
