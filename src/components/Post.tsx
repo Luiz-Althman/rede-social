@@ -35,6 +35,8 @@ export function Post({ post }: PostProps) {
     const [comments, setComments] = useState(['Post muito bacana, hein?']);
     const [newCommentText, setNewCommentText] = useState('');
 
+    const maxLength = 200;
+
     // configura o formato da hora e os que estão com aspas simples é para o date-fns entender que não precisa formatar.
     const publishedDateFormatted = format(
         post.publishedAt,
@@ -125,8 +127,14 @@ export function Post({ post }: PostProps) {
                     value={newCommentText}
                     placeholder="Deixe um comentário"
                     onInvalid={handleNewCommentInvalid}
+                    maxLength={maxLength}
                     required
                 />
+                <div>
+                    <p>
+                        {maxLength - newCommentText.length} caracteres restantes
+                    </p>
+                </div>
                 <footer>
                     <button disabled={isNewCommentEmpty} type="submit">
                         Publicar

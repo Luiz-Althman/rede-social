@@ -92,6 +92,16 @@
     max-height: none;
 }
 
+.commentForm div {
+    visibility: hidden;
+    display: flex;
+    justify-content: end;
+}
+.commentForm:focus-within div p {
+    color: var(--gray-300);
+    visibility: visible;
+}
+
 .commentForm button[type='submit'] {
     padding: 1rem 1.5rem;
     margin-top: 1rem;

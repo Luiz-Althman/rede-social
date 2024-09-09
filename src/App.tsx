@@ -70,8 +70,17 @@ export function App() {
 
     return (
         <div>
-            {loading ? (
-                <div style={{ width: '100%', height: '100%' }}>
+            {!loading ? (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100vh',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                    }}
+                >
                     <img src={CircularProgress} height={100} width={100} />
                 </div>
             ) : (

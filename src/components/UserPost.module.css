@@ -10,6 +10,16 @@
     margin-top: 2rem;
 }
 
+.post div {
+    visibility: hidden;
+    display: flex;
+    justify-content: end;
+}
+.post:focus-within div p {
+    color: var(--gray-300);
+    visibility: visible;
+}
+
 .content {
     line-height: 1.6;
     color: var(--gray-300);

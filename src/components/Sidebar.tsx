@@ -1,9 +1,17 @@
 import styles from './Sidebar.module.css';
 
 import { PiPencilSimpleLineLight } from 'react-icons/pi';
+import { CiLogout } from 'react-icons/ci';
 import { Avatar } from './Avatar';
+import { ROUTER } from '../shared/constants/router';
+import { useCallback } from 'react';
 
 export function Sidebar() {
+    const signOut = useCallback(() => {
+        window.localStorage.clear();
+        window.location.href = ROUTER.LOGIN;
+    }, []);
+
     return (
         <aside className={styles.sidebar}>
             <img
@@ -19,8 +27,11 @@ export function Sidebar() {
             </div>
 
             <footer>
-                <a href="#">
+                {/* <a href="#">
                     <PiPencilSimpleLineLight size={20} /> Editar seu perfil
+                </a> */}
+                <a onClick={signOut}>
+                    <CiLogout size={20} /> Sair
                 </a>
             </footer>
         </aside>

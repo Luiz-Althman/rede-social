@@ -1,11 +1,12 @@
 import { ChangeEvent, InvalidEvent, useState } from 'react';
 import styles from './UserPost.module.css';
+import { ROUTER } from '../shared/constants/router';
 
 import { useForm } from 'react-hook-form';
 import { createNewPost } from '../shared/services/Feed';
 import toast from 'react-hot-toast';
 
-interface NewPostType {
+export interface NewPostType {
     content: string;
     id: number;
 }
@@ -17,6 +18,8 @@ export interface NewPostTypeResponse {
 export function UserPost() {
     const [newPost, setNewPost] = useState('');
 
+    const maxLength = 200;
+
     const { register, handleSubmit, setValue } = useForm<NewPostType>({
         mode: 'onBlur',
         reValidateMode: 'onChange',
@@ -24,16 +27,17 @@ export function UserPost() {
 
     const onSubmit = async (values: NewPostType) => {
         console.log('values => ', values);
-        return false;
         try {
-            const { status, data } = await createNewPost();
+            const { status, data } = await createNewPost(values);
             if ([200, 201].includes(status)) {
                 console.log('data =>', data);
                 toast.success('Post feito!', { duration: 1500 });
-                window.location.href = '/';
+                setTimeout(() => {
+                    window.location.href = ROUTER.HOME;
+                }, 1000);
                 setValue('content', '');
             } else {
-                toast.error('Erro ao fazer o post!', { duration: 1500 });
+                toast.error('Erro, tente novamente!', { duration: 1500 });
             }
         } catch (err) {
             console.log('error =>', err);
@@ -55,12 +59,16 @@ export function UserPost() {
             <form onSubmit={handleSubmit(onSubmit)} className={styles.post}>
                 <textarea
                     value={newPost}
-                    placeholder="No que você está pensando ?"
+                    placeholder="No que você está pensando...?"
                     onInvalid={handleNewPostInvalid}
                     required
+                    maxLength={maxLength}
                     {...register('content')}
                     onChange={handleNewPostChange}
                 />
+                <div>
+                    <p>{maxLength - newPost.length} caracteres restantes</p>
+                </div>
                 <footer>
                     <button disabled={isNewPostEmpty} type="submit">
                         Publicar
