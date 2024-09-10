@@ -10,6 +10,7 @@ import { ROUTER } from '../shared/constants/router';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaArrowLeft } from 'react-icons/fa6';
+import { PasswordRules } from './PasswordRules';
 
 const Schema = yup.object().shape({
     name: yup.string().required('Campo obrigatório.'),
@@ -20,7 +21,7 @@ const Schema = yup.object().shape({
         .string()
         .email('Insira um e-mail válido.')
         .required('Campo obrigatório.'),
-    password: yup.string().required('Campo obrigatório.'),
+    password: yup.string().required('Campo obrigatório'),
 });
 
 export function Register() {
@@ -30,7 +31,7 @@ export function Register() {
         setShowPassword(!showPassword);
     };
 
-    const { handleSubmit, register } = useForm<IAuthRegister>({
+    const { handleSubmit, register, watch } = useForm<IAuthRegister>({
         resolver: yupResolver(Schema),
         mode: 'onBlur',
         reValidateMode: 'onChange',
@@ -38,16 +39,15 @@ export function Register() {
 
     const signIn = useCallback(async (values: IAuthRegister) => {
         console.log('values =>', values);
-        localStorage.setItem('email', values.email);
-        return false;
 
         try {
             const { status } = await registerCreate(values);
-            if ([200, 201, 404].includes(status)) {
-                toast.success('Cadastrado com sucesso!', { duration: 1500 });
+            if ([200, 201].includes(status)) {
+                toast.success('Cadastrado com sucesso!', { duration: 2000 });
+                localStorage.setItem('email', values.email);
                 setTimeout(() => {
                     window.location.href = ROUTER.LOGIN;
-                }, 1500);
+                }, 2500);
             } else {
                 throw new Error('Ocorreu um erro, tente novamente.');
             }
@@ -143,6 +143,7 @@ export function Register() {
                         required
                         {...register('password')}
                     />
+                    <PasswordRules value={watch('password')} />
                     <button type="button" onClick={toggleShowPassword}>
                         {showPassword ? (
                             <IoMdEye size={25} />
