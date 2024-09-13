@@ -4,6 +4,12 @@ export interface IUser {
     name: string;
     surname: string;
     role: string;
+    avatar?: string;
+}
+
+export interface IUserResponse {
+    data: IUser;
+    status: number;
 }
 
 export interface IAuth {
@@ -38,4 +44,18 @@ export interface IAuthRegister {
 export interface IAuthRegisterResponse {
     data: IAuthRegister;
     status: number;
+}
+
+export interface IPicture {
+    id: number;
+    name: string;
+    key: string;
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface IPictureResponse {
+    status: number;
+    data: IPicture;
 }

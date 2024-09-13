@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter } from 'react-router-dom';
-import { Auth } from './components/Auth.js';
 import Routers from './shared/router/index.js';
+import { AuthProvider } from './shared/providers/auth/index.js';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <BrowserRouter>
-            <Auth>
+            <AuthProvider>
                 <Routers />
-            </Auth>
+            </AuthProvider>
             <Toaster />
         </BrowserRouter>
     </React.StrictMode>

@@ -2,6 +2,7 @@
     background: var(--gray-800);
     border-radius: 8px;
     overflow: hidden;
+    position: relative;
 }
 
 .cover {

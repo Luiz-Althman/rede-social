@@ -3,12 +3,18 @@ import styles from './Login.module.css';
 import igniteLogo from '../assets/Ignite-logo.svg';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { useForm } from 'react-hook-form';
-import { IAuthLogin } from '../shared/types/Auth';
+import { IAuthenticated, IAuthLogin } from '../shared/types/Auth';
 import toast from 'react-hot-toast';
-import { login } from '../shared/services/Auth';
+import { getAuthenticatedUser, login } from '../shared/services/Auth';
 import { ROUTER } from '../shared/constants/router';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { getDifferenceInMinutes } from '../shared/parsers/date';
+import {
+    clearAuthenticatedUser,
+    setAuthenticatedUser,
+} from '../shared/parsers/localstorage';
+import { useAuth } from '../shared/providers/auth';
 
 const Schema = yup.object().shape({
     email: yup
@@ -20,6 +26,7 @@ const Schema = yup.object().shape({
 
 export function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const { onSubmit } = useAuth();
 
     const withRegister = window.localStorage.getItem('email');
 
@@ -33,24 +40,6 @@ export function Login() {
         reValidateMode: 'onChange',
     });
 
-    const signIn = useCallback(async (values: IAuthLogin) => {
-        console.log('values =>', values);
-        try {
-            const { status } = await login(values);
-            if ([200, 201, 404].includes(status)) {
-                toast.success('Autenticado. Aguarde...', { duration: 1500 });
-                localStorage.setItem('logged-user', 'true');
-                setTimeout(() => {
-                    window.location.href = ROUTER.HOME;
-                }, 1500);
-            } else {
-                throw new Error('Email ou senha inválido.');
-            }
-        } catch (e: any) {
-            toast.error(e.message);
-        }
-    }, []);
-
     useEffect(() => {
         if (withRegister && withRegister) {
             setValue('email', withRegister);
@@ -63,7 +52,7 @@ export function Login() {
                 <img src={igniteLogo} alt="Logotipo do Ignite" />
                 <h1>Login</h1>
             </header>
-            <form className={styles.content} onSubmit={handleSubmit(signIn)}>
+            <form className={styles.content} onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.input}>
                     <label className={styles.label} htmlFor="emailLogin">
                         E-mail
@@ -104,4 +93,9 @@ export function Login() {
             </form>
         </div>
     );
+}
+function me(
+    access_token: string
+): { status: any; data: any } | PromiseLike<{ status: any; data: any }> {
+    throw new Error('Function not implemented.');
 }
