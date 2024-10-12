@@ -7,15 +7,26 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../shared/providers/auth';
 
 import { PiPencilSimpleLineLight } from 'react-icons/pi';
+import { useNavigate } from 'react-router-dom';
+import { ROUTER } from '../shared/constants/router';
+import { DEFAULT_AVATAR } from '../shared/config/properties';
 
 interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
     hasBorder?: boolean;
+    editAvatar?: boolean;
 }
 //usando o extends eu consigo extender todos os atributos do <img> sem precisar passar na tipagem.
 
-export function Avatar({ hasBorder = true, ...props }: AvatarProps) {
-    const { user, reload } = useAuth();
+export function Avatar({
+    hasBorder = true,
+    editAvatar = false,
+    ...props
+}: AvatarProps) {
     // ...props (rest operator) permite que todas as propriedades que o <img> tem, sejam aceitas em qualquer lugar que usar o componente, sem precisar passar na interface ou em props direto na função como o hasBorder
+    const { user, reload } = useAuth();
+
+    const isSidebar = editAvatar;
+    const navigate = useNavigate();
 
     const inputFile = useRef<any>(null);
 
@@ -31,11 +42,10 @@ export function Avatar({ hasBorder = true, ...props }: AvatarProps) {
             if ([200, 201].includes(status)) {
                 user.avatar = data.url;
 
-                const { status: statusProfile } = await update(user);
+                const { status: statusAvatar } = await update(user);
 
-                if ([200, 201].includes(statusProfile)) {
-                    // navigate(ROUTER.PROFILE);
-                    window.location.href = '/profile';
+                if ([200, 201].includes(statusAvatar)) {
+                    navigate(ROUTER.HOME);
                     toast.success('Alterado com sucesso!');
                 }
 
@@ -48,7 +58,13 @@ export function Avatar({ hasBorder = true, ...props }: AvatarProps) {
             inputFile.current.value = '';
         }
     };
-    return (
+    return isSidebar ? (
+        <img
+            className={hasBorder ? styles.avatarWithBorder : styles.avatar}
+            {...props}
+            //{...props} ele que captura tudo do ...props do que está declarado na função
+        />
+    ) : (
         <div className={styles.wrapper} onClick={handleChangeImg}>
             <input
                 type="file"
@@ -61,7 +77,8 @@ export function Avatar({ hasBorder = true, ...props }: AvatarProps) {
             </div>
             <img
                 className={hasBorder ? styles.avatarWithBorder : styles.avatar}
-                {...props}
+                src={user.avatar || DEFAULT_AVATAR}
+                // {...props}
                 //{...props} ele que captura tudo do ...props do que está declarado na função
             />
         </div>

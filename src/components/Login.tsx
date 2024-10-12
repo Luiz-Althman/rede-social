@@ -94,8 +94,3 @@ export function Login() {
         </div>
     );
 }
-function me(
-    access_token: string
-): { status: any; data: any } | PromiseLike<{ status: any; data: any }> {
-    throw new Error('Function not implemented.');
-}

@@ -12,7 +12,7 @@ interface Author {
 }
 
 interface Content {
-    type: 'paragraph' | 'link';
+    type: string;
     content: string;
 }
 export interface PostType {
@@ -88,7 +88,7 @@ export function Post({ post }: PostProps) {
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <Avatar src={post.author.avatarUrl} />
+                    <Avatar src={post.author.avatarUrl} editAvatar />
                     <div className={styles.authorInfo}>
                         <strong>{post.author.name}</strong>
                         <span>{post.author.role}</span>
@@ -104,15 +104,7 @@ export function Post({ post }: PostProps) {
 
             <div className={styles.content}>
                 {post.content.map((line) => {
-                    if (line.type === 'paragraph') {
-                        return <p key={line.content}>{line.content}</p>;
-                    } else if (line.type === 'link') {
-                        return (
-                            <p key={line.content}>
-                                <a href="#">{line.content}</a>
-                            </p>
-                        );
-                    }
+                    return <p key={line.content}>{line.content}</p>;
                 })}
             </div>
 

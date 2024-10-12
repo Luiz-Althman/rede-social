@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 //Public pages
 
 //Authenticated pages
-import { App } from '../../App';
+import App from '../../App';
 
 import { ROUTER } from '../../shared/constants/router';
 import { Login } from '../../components/Login';

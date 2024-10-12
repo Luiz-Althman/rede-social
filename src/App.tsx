@@ -7,7 +7,7 @@ import { Sidebar } from './components/Sidebar';
 import { useCallback, useEffect, useState } from 'react';
 import { getPostsFeed } from './shared/services/Feed';
 import { UserPost } from './components/UserPost';
-import CircularProgress from './assets/CircularProgress.gif';
+import withAuthenticationRequired from './shared/hocs/with-authentication-required';
 
 const posts: PostType[] = [
     {
@@ -48,8 +48,7 @@ const posts: PostType[] = [
     },
 ];
 
-export function App() {
-    const [loading, setLoading] = useState(true);
+const App = () => {
     // const [posts, setPosts] = useState<PostType[]>([]);
 
     // const GetFeed = useCallback(async () => {
@@ -70,33 +69,18 @@ export function App() {
 
     return (
         <div>
-            {!loading ? (
-                <div
-                    style={{
-                        width: '100%',
-                        height: '100vh',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'column',
-                    }}
-                >
-                    <img src={CircularProgress} height={100} width={100} />
-                </div>
-            ) : (
-                <>
-                    <Header />
-                    <div className={styles.wrapper}>
-                        <Sidebar />
-                        <main>
-                            <UserPost />
-                            {posts.map((post) => {
-                                return <Post key={post.id} post={post} />;
-                            })}
-                        </main>
-                    </div>
-                </>
-            )}
+            <Header />
+            <div className={styles.wrapper}>
+                <Sidebar />
+                <main>
+                    <UserPost />
+                    {posts.map((post) => {
+                        return <Post key={post.id} post={post} />;
+                    })}
+                </main>
+            </div>
         </div>
     );
-}
+};
+
+export default withAuthenticationRequired(App);
