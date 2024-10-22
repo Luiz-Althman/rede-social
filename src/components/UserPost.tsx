@@ -1,4 +1,4 @@
-import { ChangeEvent, InvalidEvent, useState } from 'react';
+import { InvalidEvent, useState } from 'react';
 import styles from './UserPost.module.css';
 import { ROUTER } from '../shared/constants/router';
 
@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 
 export interface NewPostType {
     content: string;
-    id: number;
+    userId: number;
 }
 export interface NewPostTypeResponse {
     status: number;
@@ -18,24 +18,26 @@ export interface NewPostTypeResponse {
 export function UserPost() {
     const [newPost, setNewPost] = useState('');
 
-    const maxLength = 200;
-
     const { register, handleSubmit, setValue } = useForm<NewPostType>({
         mode: 'onBlur',
         reValidateMode: 'onChange',
     });
 
     const onSubmit = async (values: NewPostType) => {
-        console.log('values => ', values);
         try {
+            const local = localStorage.getItem('socialMedia:dev:user');
+            const userId = JSON.parse(local || '');
+
+            values.userId = userId.userId;
+
             const { status, data } = await createNewPost(values);
             if ([200, 201].includes(status)) {
-                console.log('data =>', data);
-                toast.success('Post feito!', { duration: 1500 });
-                setTimeout(() => {
-                    window.location.href = ROUTER.HOME;
-                }, 1000);
+                toast.success('Postado com sucesso!', { duration: 1500 });
+                // setTimeout(() => {
+                //     window.location.href = ROUTER.HOME;
+                // }, 1000);
                 setValue('content', '');
+                setNewPost(data.content);
             } else {
                 toast.error('Erro, tente novamente!', { duration: 1500 });
             }
@@ -44,35 +46,27 @@ export function UserPost() {
         }
     };
 
-    function handleNewPostChange(event: ChangeEvent<HTMLTextAreaElement>) {
-        setNewPost(event.target.value);
-    }
+    // function handleNewPostChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    //     setNewPost(event.target.value);
+    // }
 
     function handleNewPostInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
         //essa função faz com que troquemos a mensagem do required, padrao do html. Pt-1
         event.target.setCustomValidity('Campo obrigatório');
     }
-    const isNewPostEmpty = newPost.length === 0;
 
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.post}>
                 <textarea
-                    value={newPost}
                     placeholder="No que você está pensando...?"
                     onInvalid={handleNewPostInvalid}
                     required
-                    maxLength={maxLength}
                     {...register('content')}
-                    onChange={handleNewPostChange}
                 />
-                <div>
-                    <p>{maxLength - newPost.length} caracteres restantes</p>
-                </div>
+
                 <footer>
-                    <button disabled={isNewPostEmpty} type="submit">
-                        Publicar
-                    </button>
+                    <button type="submit">Publicar</button>
                 </footer>
             </form>
         </div>

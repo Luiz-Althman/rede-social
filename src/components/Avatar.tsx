@@ -23,7 +23,7 @@ export function Avatar({
     ...props
 }: AvatarProps) {
     // ...props (rest operator) permite que todas as propriedades que o <img> tem, sejam aceitas em qualquer lugar que usar o componente, sem precisar passar na interface ou em props direto na função como o hasBorder
-    const { user, reload } = useAuth();
+    // const { user } = useAuth();
 
     const isSidebar = editAvatar;
     const navigate = useNavigate();
@@ -34,30 +34,32 @@ export function Avatar({
         inputFile.current.click();
     };
 
-    const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const formData = new FormData();
-            formData.append('file', e.target.files[0]);
-            const { status, data } = await uploadPicture(formData);
-            if ([200, 201].includes(status)) {
-                user.avatar = data.url;
+    const handleImage = localStorage.getItem('user-image') ?? DEFAULT_AVATAR;
 
-                const { status: statusAvatar } = await update(user);
+    // const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     if (e.target.files && e.target.files[0]) {
+    //         const formData = new FormData();
+    //         formData.append('file', e.target.files[0]);
+    //         const { status, data } = await uploadPicture(formData);
+    //         if ([200, 201].includes(status)) {
+    //             user.avatar = data.url;
 
-                if ([200, 201].includes(statusAvatar)) {
-                    navigate(ROUTER.HOME);
-                    toast.success('Alterado com sucesso!');
-                }
+    //             const { status: statusAvatar } = await update(user);
 
-                reload();
-            } else {
-                toast.error(
-                    'Não foi possível alterar sua foto, tente novamente.'
-                );
-            }
-            inputFile.current.value = '';
-        }
-    };
+    //             if ([200, 201].includes(statusAvatar)) {
+    //                 navigate(ROUTER.HOME);
+    //                 toast.success('Alterado com sucesso!');
+    //             }
+
+    //             reload();
+    //         } else {
+    //             toast.error(
+    //                 'Não foi possível alterar sua foto, tente novamente.'
+    //             );
+    //         }
+    //         inputFile.current.value = '';
+    //     }
+    // };
     return isSidebar ? (
         <img
             className={hasBorder ? styles.avatarWithBorder : styles.avatar}
@@ -69,7 +71,7 @@ export function Avatar({
             <input
                 type="file"
                 ref={inputFile}
-                onChange={handleSubmit}
+                // onChange={handleSubmit}
                 style={{ display: 'none' }}
             />
             <div className={styles.icon}>
@@ -77,7 +79,7 @@ export function Avatar({
             </div>
             <img
                 className={hasBorder ? styles.avatarWithBorder : styles.avatar}
-                src={user.avatar || DEFAULT_AVATAR}
+                src={handleImage}
                 // {...props}
                 //{...props} ele que captura tudo do ...props do que está declarado na função
             />

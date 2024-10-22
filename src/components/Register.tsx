@@ -48,6 +48,11 @@ export function Register() {
                 setTimeout(() => {
                     window.location.href = ROUTER.LOGIN;
                 }, 2500);
+                localStorage.setItem(
+                    'user-image',
+                    'https://github.com/Luiz-Althman.png'
+                );
+                localStorage.setItem('user', JSON.stringify(values));
             } else {
                 throw new Error('Ocorreu um erro, tente novamente.');
             }

@@ -7,6 +7,10 @@ import { useAuth } from '../shared/providers/auth';
 export function Sidebar() {
     const { signOut } = useAuth();
 
+    const details = localStorage.getItem('user');
+
+    const user = JSON.parse(details || '{}');
+
     return (
         <aside className={styles.sidebar}>
             <img
@@ -17,8 +21,10 @@ export function Sidebar() {
 
             <div className={styles.profile}>
                 <Avatar src="https://github.com/Luiz-Althman.png" />
-                <strong>Luiz Henrique</strong>
-                <span>Web Developer</span>
+                <strong>
+                    {user?.name} {user?.surname}
+                </strong>
+                <span>{user?.role}</span>
             </div>
 
             <footer>
