@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './Register.module.css';
 import igniteLogo from '../assets/Ignite-logo.svg';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
@@ -58,6 +58,12 @@ export function Register() {
             }
         } catch (e: any) {
             toast.error(e.message);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (localStorage.getItem('userMock')) {
+            localStorage.removeItem('userMock');
         }
     }, []);
 

@@ -33,9 +33,9 @@ export function UserPost() {
             const { status, data } = await createNewPost(values);
             if ([200, 201].includes(status)) {
                 toast.success('Postado com sucesso!', { duration: 1500 });
-                // setTimeout(() => {
-                //     window.location.href = ROUTER.HOME;
-                // }, 1000);
+                setTimeout(() => {
+                    window.location.href = ROUTER.HOME;
+                }, 1000);
                 setValue('content', '');
                 setNewPost(data.content);
             } else {

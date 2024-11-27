@@ -15,6 +15,9 @@ export const getAuthenticatedUser = (): IAuthenticated => {
 export const clearAuthenticatedUser = (): void => {
     localStorage.removeItem(AUTH_TOKEN);
     localStorage.removeItem(AUTH_USER);
+    localStorage.removeItem('logged-email');
+    localStorage.removeItem('email');
+    localStorage.removeItem('user');
 };
 
 export const setAuthenticatedUser = ({ auth, user }: IAuthenticated): void => {

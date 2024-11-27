@@ -3,13 +3,21 @@ import styles from './Sidebar.module.css';
 import { CiLogout } from 'react-icons/ci';
 import { Avatar } from './Avatar';
 import { useAuth } from '../shared/providers/auth';
+import { useEffect } from 'react';
+import { DEFAULT_AVATAR } from '../shared/config/properties';
 
 export function Sidebar() {
     const { signOut } = useAuth();
 
     const details = localStorage.getItem('user');
+    const detailsMock = localStorage.getItem('socialMedia:dev:user');
 
     const user = JSON.parse(details || '{}');
+    const userMock = JSON.parse(detailsMock || '{}');
+
+    useEffect(() => {
+        console.log('oi', userMock.userId);
+    }, [userMock]);
 
     return (
         <aside className={styles.sidebar}>
@@ -20,9 +28,11 @@ export function Sidebar() {
             />
 
             <div className={styles.profile}>
-                <Avatar src="https://github.com/Luiz-Althman.png" />
+                <Avatar src={DEFAULT_AVATAR} />
                 <strong>
-                    {user?.name} {user?.surname}
+                    {user && user.name}{' '}
+                    {userMock.userId === 1 && 'Luiz Althman'}{' '}
+                    {user && user.surname}
                 </strong>
                 <span>{user?.role}</span>
             </div>

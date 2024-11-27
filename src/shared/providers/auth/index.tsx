@@ -74,7 +74,12 @@ const AuthProvider: React.FC<IProps> = ({ children }) => {
                     auth: { access_token: data.access_token },
                     user: dataMe,
                 };
-
+                if (!localStorage.getItem('user')) {
+                    localStorage.setItem(
+                        'userMock',
+                        JSON.stringify({ userId: 1 })
+                    );
+                }
                 setAuthenticatedUser(authenticated);
                 setData(authenticated);
                 setTimeout(() => {
@@ -87,6 +92,20 @@ const AuthProvider: React.FC<IProps> = ({ children }) => {
             toast.error(e.message);
         }
     }, []);
+
+    // const reload = React.useCallback(async (): Promise<boolean> => {
+    //     try {
+    //       if (!localStorage.getItem(AUTH_TOKEN)) return false;
+    //       const { status, data } = await me();
+    //       if (status === 200) {
+    //         setUser(data);
+    //       }
+    //       return true;
+    //     } catch (e: any) {
+    //       console.log(e.message);
+    //       return false;
+    //     }
+    //   }, []);
 
     const signOut = React.useCallback(() => {
         clearAuthenticatedUser();
